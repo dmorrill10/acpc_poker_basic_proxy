@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description = %q{Basic proxy to connect to the ACPC Dealer.}
   
   s.add_development_dependency 'acpc_poker_types'
-
+  
   s.rubyforge_project = "acpc_poker_basic_proxy"
 
   s.files         = `git ls-files`.split("\n")

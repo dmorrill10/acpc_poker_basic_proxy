@@ -3,18 +3,22 @@
 require 'socket'
 
 # Gems
-# @todo Only want AcpcPokerTypesDefs and easy_exceptions, is there a way to select this?
+# @todo Only want easy_exceptions, is there a way to select this?
 require 'acpc_poker_types'
+
+# Local modules
+require File.expand_path('../../acpc_poker_basic_proxy_defs', __FILE__)
 
 # Local mixins
 require File.expand_path('../../mixins/socket_with_ready_methods', __FILE__)
+
 
 # Communication service to the ACPC Dealer.
 # It acts solely as an abstraction of the communication protocal and
 # implements the main Ruby communication interface through 'gets' and 'puts'
 # methods.
 class AcpcDealerCommunicator
-   include AcpcPokerTypesDefs
+   include AcpcPokerBasicProxyDefs
    
    exceptions :acpc_dealer_connection_error, :put_to_acpc_dealer_error, :get_from_acpc_dealer_error
    
@@ -28,7 +32,7 @@ class AcpcDealerCommunicator
       rescue PutToAcpcDealerError
          raise
       rescue
-         handle_error AcpcDealerConnectionError, "Unable to connect to the dealer on #{host_name} through port #{port}"
+         handle_error AcpcDealerConnectionError, "Unable to connect to the dealer on #{host_name} through port #{port}: #{$?}"
       end
    end
 
@@ -45,7 +49,7 @@ class AcpcDealerCommunicator
       begin
          raw_match_state = @dealer_socket.gets
       rescue
-         handle_error GetFromAcpcDealerError, "Unable to get a string from the dealer"
+         handle_error GetFromAcpcDealerError, "Unable to get a string from the dealer: #{$?}"
       end
       raw_match_state.chomp
    end
@@ -58,7 +62,7 @@ class AcpcDealerCommunicator
       begin
          send_string_to_dealer string
       rescue
-         handle_error PutToAcpcDealerError, "Unable to send the string, \"#{string}\", to the dealer"
+         handle_error PutToAcpcDealerError, "Unable to send the string, \"#{string}\", to the dealer: #{$?}."
       end
    end
    
