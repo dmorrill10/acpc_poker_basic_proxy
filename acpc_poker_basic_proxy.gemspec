@@ -13,6 +13,10 @@ Gem::Specification.new do |s|
   
   s.add_development_dependency 'acpc_poker_types'
   
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'mocha'
+  s.add_development_dependency 'simplecov'
+  
   s.rubyforge_project = "acpc_poker_basic_proxy"
 
   s.files         = Dir.glob("lib/**/*") + Dir.glob("src/**/*") + Dir.glob("ext/**/*") + %w(Rakefile acpc_poker_basic_proxy.gemspec tasks.rb)
