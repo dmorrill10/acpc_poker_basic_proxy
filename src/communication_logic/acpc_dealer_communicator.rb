@@ -47,11 +47,11 @@ class AcpcDealerCommunicator
    # @raise GetFromAcpcDealerError
    def gets
       begin
-         raw_match_state = @dealer_socket.gets
+         raw_match_state = @dealer_socket.gets.chomp
       rescue
          handle_error GetFromAcpcDealerError, "Unable to get a string from the dealer: #{$?}"
       end
-      raw_match_state.chomp
+      raw_match_state
    end
    
    # Sends a given +string+ to the dealer.
