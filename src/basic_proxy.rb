@@ -24,7 +24,7 @@ class BasicProxy
    end
    
    # @see MatchstateStringReceiver#receive_match_state_string
-   def receive_match_state_string
-      @match_state = MatchstateStringReceiver.receive_matchstate_string @dealer_communicator
+   def receive_match_state_string(acting_player_sees_wager=true)
+      @match_state = MatchstateStringReceiver.receive_matchstate_string @dealer_communicator, acting_player_sees_wager
    end
 end
