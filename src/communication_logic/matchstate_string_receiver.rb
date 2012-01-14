@@ -10,6 +10,6 @@ class MatchstateStringReceiver
    # @return [MatchstateString] The matchstate string that was received from the +connection+.
    def self.receive_matchstate_string(connection, acting_player_sees_wager=true)
       raw_match_state_string = connection.gets
-      MatchstateString.new(raw_match_state_string, acting_player_sees_wager)
+      [MatchstateString.new(raw_match_state_string, acting_player_sees_wager), raw_match_state_string]
    end
 end

@@ -34,16 +34,16 @@ describe BasicProxy do
          receive_a_match_state
          mock_action = mock 'PokerAction'
          
-         ActionSender.expects(:send_action).once.with(@dealer_communicator, @mock_match_state, mock_action)
+         ActionSender.expects(:send_action).once.with(@dealer_communicator, @mock_match_state.to_s, mock_action)
          
          @patient.send_action mock_action
       end
    end
    
    def receive_a_match_state
-      MatchstateStringReceiver.stubs(:receive_matchstate_string).returns(@mock_match_state)
-         
+      MatchstateStringReceiver.stubs(:receive_matchstate_string).returns([@mock_match_state, @mock_match_state.to_s])
+      
       @patient.receive_match_state_string.should be @mock_match_state
-      @patient.instance_eval{ @match_state }.should be @mock_match_state
+      @patient.instance_eval{ @match_state }.should == @mock_match_state.to_s
    end
 end

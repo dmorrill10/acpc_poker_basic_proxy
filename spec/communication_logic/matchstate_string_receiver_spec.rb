@@ -24,7 +24,7 @@ describe MatchstateStringReceiver do
          @connection.expects(:gets).once.returns(raw_matchstate_string)
          MatchstateString.stubs(:new).returns(@matchstate)
          
-         MatchstateStringReceiver.receive_matchstate_string(@connection).should be @matchstate
+         MatchstateStringReceiver.receive_matchstate_string(@connection).should == [@matchstate, @matchstate.to_s]
       end
    end
 end
