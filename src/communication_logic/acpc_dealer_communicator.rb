@@ -94,7 +94,7 @@ class AcpcDealerCommunicator
    
    def send_string_to_dealer(string)
       begin
-         @dealer_socket.puts string + TERMINATION_STRING
+         @dealer_socket.write string + TERMINATION_STRING
       rescue
          raise
       end

@@ -21,7 +21,7 @@ describe AcpcDealerCommunicator do
    
    before(:each) do
       start_test_connection 0
-      @client_connection.gets.chomp.should eq("#{VERSION_LABEL}:#{VERSION_NUMBERS[:major]}.#{VERSION_NUMBERS[:minor]}.#{VERSION_NUMBERS[:revision]}\\r\\n")
+      @client_connection.gets.chomp.should eq("#{VERSION_LABEL}:#{VERSION_NUMBERS[:major]}.#{VERSION_NUMBERS[:minor]}.#{VERSION_NUMBERS[:revision]}")
    end
   
    after(:each) do
@@ -51,7 +51,7 @@ describe AcpcDealerCommunicator do
          action = MATCH_STATE_LABEL + ":1:0:|" + arbitrary_hole_card_hand + ':c'
          @patient.puts action
          
-         @client_connection.gets.chomp.should eq(action + "\\r\\n")
+         @client_connection.gets.chomp.should eq(action)
       end
    end
    

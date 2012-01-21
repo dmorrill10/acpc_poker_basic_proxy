@@ -8,5 +8,5 @@ module AcpcPokerBasicProxyDefs
    VERSION_NUMBERS = {:major => 2, :minor => 0, :revision => 0}
    
    # @return [String] Dealer specified string terminator.
-   TERMINATION_STRING = '\r\n'
+   TERMINATION_STRING = "\r\n"
 end
