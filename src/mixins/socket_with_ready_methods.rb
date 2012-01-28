@@ -26,11 +26,6 @@ class IO
    private
    
    def select(read_array, write_array=[], error_array=[], timeout_in_seconds=nil)
-      IO.select(read_array, write_array, error_array, nil) != nil
-      #if timeout_in_seconds
-      #   IO.select(read_array, write_array, error_array, timeout_in_seconds) != nil
-      #else
-      #   IO.select(read_array, write_array, error_array) != nil
-      #end
+      IO.select(read_array, write_array, error_array, timeout_in_seconds) != nil
    end
 end

@@ -35,7 +35,11 @@ class AcpcDealerCommunicator
       rescue
          handle_error AcpcDealerConnectionError, "Unable to connect to the dealer on #{host_name} through port #{port}: #{$?}"
       end
-      @millisecond_response_timeout = millisecond_response_timeout
+      @response_timeout_in_seconds = if millisecond_response_timeout
+         millisecond_response_timeout/(10**3)
+      else
+         nil
+      end
    end
 
    # Closes the connection to the dealer.
@@ -70,20 +74,12 @@ class AcpcDealerCommunicator
    
    # (see TCPSocket#ready_to_write?)
    def ready_to_write?
-      if @millisecond_response_timeout
-         @dealer_socket.ready_to_write?(@millisecond_response_timeout/(10**3))
-      else
-         @dealer_socket.ready_to_write?
-      end
+      @dealer_socket.ready_to_write? @response_timeout_in_seconds
    end
    
    # (see TCPSocket#ready_to_read?)
    def ready_to_read?
-      if @millisecond_response_timeout
-         @dealer_socket.ready_to_read?(@millisecond_response_timeout/(10**3))
-      else
-         @dealer_socket.ready_to_read?
-      end
+      @dealer_socket.ready_to_read? @response_timeout_in_seconds
    end
    
    private
