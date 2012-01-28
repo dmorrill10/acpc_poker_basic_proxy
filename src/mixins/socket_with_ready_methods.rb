@@ -9,7 +9,7 @@ class IO
       write_array = nil
       error_array = nil
 
-      select read_array, write_array, error_array, timeout_in_seconds
+      select(read_array, write_array, error_array, timeout_in_seconds)
    end
    
    # Checks if the socket is ready to be written to.
@@ -20,11 +20,12 @@ class IO
       write_array = [self]
       error_array = nil
       
-      select read_array, write_array, error_array, timeout_in_seconds
+      select(read_array, write_array, error_array, timeout_in_seconds)
    end
    
    private
    
+   # @see IO#select
    def select(read_array, write_array=[], error_array=[], timeout_in_seconds=nil)
       IO.select(read_array, write_array, error_array, timeout_in_seconds) != nil
    end

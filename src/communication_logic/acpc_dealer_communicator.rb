@@ -29,16 +29,16 @@ class AcpcDealerCommunicator
    def initialize(port, host_name = 'localhost', millisecond_response_timeout=nil)
       begin         
          @dealer_socket = TCPSocket.new(host_name, port)
+         @response_timeout_in_seconds = if millisecond_response_timeout
+            millisecond_response_timeout/(10**3)
+         else
+            nil
+         end
          send_version_string_to_dealer
       rescue PutToAcpcDealerError
          raise
       rescue
          handle_error AcpcDealerConnectionError, "Unable to connect to the dealer on #{host_name} through port #{port}: #{$?}"
-      end
-      @response_timeout_in_seconds = if millisecond_response_timeout
-         millisecond_response_timeout/(10**3)
-      else
-         nil
       end
    end
 
@@ -74,12 +74,12 @@ class AcpcDealerCommunicator
       bytes_written
    end
    
-   # (see TCPSocket#ready_to_write?)
+   # @see TCPSocket#ready_to_write?
    def ready_to_write?
       @dealer_socket.ready_to_write? @response_timeout_in_seconds
    end
    
-   # (see TCPSocket#ready_to_read?)
+   # @see TCPSocket#ready_to_read?
    def ready_to_read?
       @dealer_socket.ready_to_read? @response_timeout_in_seconds
    end
