@@ -30,11 +30,11 @@ describe AcpcDealerCommunicator do
    end
    
    describe "#ready_to_read?" do
-      it 'lets the caller know if there is not new input from the dealer' do
+      it 'lets the caller know that there is not new input from the dealer' do
          @patient.ready_to_read?.should be false
       end
    
-      it 'lets the caller know if there is new input from the dealer' do
+      it 'lets the caller know that there is new input from the dealer' do
          @client_connection.puts "New input"
          @patient.ready_to_read?.should be true
       end
@@ -65,7 +65,7 @@ describe AcpcDealerCommunicator do
    
    def start_test_connection(port)
       fake_dealer = TCPServer.open(port)
-      @patient = AcpcDealerCommunicator.new fake_dealer.addr[1]
+      @patient = AcpcDealerCommunicator.new fake_dealer.addr[1], 'localhost', 0
       
       @client_connection = fake_dealer.accept
    end

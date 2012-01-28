@@ -13,11 +13,13 @@ describe BasicProxy do
       
       port_number = 9001
       host_name = 'localhost'
+      millisecond_response_timeout = 0
       delaer_info = mock 'AcpcDealerInformation'
       delaer_info.stubs(:host_name).once.returns(host_name)
       delaer_info.stubs(:port_number).once.returns(port_number)
+      delaer_info.stubs(:millisecond_response_timeout).once.returns(millisecond_response_timeout)
       @dealer_communicator = mock 'AcpcDealerCommunicator'
-      AcpcDealerCommunicator.stubs(:new).once.with(port_number, host_name).returns(@dealer_communicator)
+      AcpcDealerCommunicator.stubs(:new).once.with(port_number, host_name, millisecond_response_timeout).returns(@dealer_communicator)
       
       @patient = BasicProxy.new delaer_info
    end

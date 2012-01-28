@@ -12,7 +12,7 @@ class BasicProxy
    
    # @param [AcpcDealerInformation] dealer_information Information about the dealer to which this bot should connect.
    def initialize(dealer_information)
-      @dealer_communicator = AcpcDealerCommunicator.new dealer_information.port_number, dealer_information.host_name
+      @dealer_communicator = AcpcDealerCommunicator.new dealer_information.port_number, dealer_information.host_name, dealer_information.millisecond_response_timeout
    end
    
    # @param [PokerAction] action The action to be sent.

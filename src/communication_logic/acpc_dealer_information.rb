@@ -7,8 +7,12 @@ class AcpcDealerInformation
    # @return [Integer] The port number of the dealer associated with this table.
    attr_reader :port_number
    
-   def initialize(host_name, port_number)
+   # @return [Integer] The dealer's response timeout.
+   attr_reader :millisecond_response_timeout
+   
+   def initialize(host_name, port_number, millisecond_response_timeout=-1)
       @host_name = host_name
       @port_number = port_number
+      @millisecond_response_timeout = millisecond_response_timeout
    end
 end
