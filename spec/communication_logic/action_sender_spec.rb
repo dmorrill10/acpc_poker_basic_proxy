@@ -34,7 +34,7 @@ describe ActionSender do
             @mock_action.stubs(:to_acpc).twice.returns(action)
             match_state_string = @matchstate.to_s
             action_that_should_be_sent = match_state_string + ":#{action}"
-            @connection.expects(:puts).once.with(action_that_should_be_sent)
+            @connection.expects(:write).once.with(action_that_should_be_sent)
             @matchstate.stubs(:to_s).twice.returns(match_state_string)
          
             ActionSender.send_action @connection, @matchstate, @mock_action
@@ -54,7 +54,7 @@ describe ActionSender do
             @mock_action.stubs(:to_acpc).times(3).returns(action_string)
             match_state_string = @matchstate.to_s
             action_that_should_be_sent = match_state_string + ":#{action_string}"
-            @connection.expects(:puts).once.with(action_that_should_be_sent)
+            @connection.expects(:write).once.with(action_that_should_be_sent)
             @matchstate.stubs(:to_s).twice.returns(match_state_string)
          
             ActionSender.send_action @connection, @matchstate, @mock_action

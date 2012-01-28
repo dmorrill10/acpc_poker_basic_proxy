@@ -16,6 +16,7 @@ class BasicProxy
    end
    
    # @param [PokerAction] action The action to be sent.
+   # @return (see ActionSender#send_action)
    # @raise InitialMatchStateNotYetReceived
    # @raise (see ActionSender#send_action)
    def send_action(action)

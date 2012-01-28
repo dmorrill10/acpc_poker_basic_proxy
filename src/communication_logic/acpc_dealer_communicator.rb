@@ -53,7 +53,7 @@ class AcpcDealerCommunicator
    # @raise GetFromAcpcDealerError
    def gets
       begin
-         raw_match_state = @dealer_socket.gets.chomp
+         raw_match_state = string_from_dealer
       rescue
          handle_error GetFromAcpcDealerError, "Unable to get a string from the dealer: #{$?}"
       end
@@ -63,13 +63,15 @@ class AcpcDealerCommunicator
    # Sends a given +string+ to the dealer.
    #
    # @param [String] string The string to send.
-   # @raise PutsToAcpcDealerError
-   def puts(string)      
+   # @return (see #send_string_to_dealer)
+   # @raise WriteToAcpcDealerError
+   def write(string)
       begin
-         send_string_to_dealer string
+         bytes_written = send_string_to_dealer string
       rescue
-         handle_error PutToAcpcDealerError, "Unable to send the string, \"#{string}\", to the dealer: #{$?}."
+         handle_error WriteToAcpcDealerError, "Unable to send the string, \"#{string}\", to the dealer: #{$?}."
       end
+      bytes_written
    end
    
    # (see TCPSocket#ready_to_write?)
@@ -89,20 +91,35 @@ class AcpcDealerCommunicator
       raise exception, message
    end
    
+   # @return (see #send_string_to_dealer)
    def send_version_string_to_dealer
       version_string = "#{VERSION_LABEL}:#{VERSION_NUMBERS[:major]}.#{VERSION_NUMBERS[:minor]}.#{VERSION_NUMBERS[:revision]}"
       begin
-         send_string_to_dealer version_string
+         bytes_written = send_string_to_dealer version_string
       rescue
          handle_error PutToAcpcDealerError, "Unable to send version string, \"#{version_string}\", to the dealer"
       end
+      bytes_written
    end
-   
+
+   # @return [Integer] The number of bytes written to the dealer.   
    def send_string_to_dealer(string)
+      raise unless ready_to_write?
       begin
-         @dealer_socket.write string + TERMINATION_STRING
+         bytes_written = @dealer_socket.write(string + TERMINATION_STRING)
       rescue
          raise
       end
+      bytes_written
+   end
+
+   def string_from_dealer
+      raise unless ready_to_read?
+      begin
+         string = @dealer_socket.gets.chomp
+      rescue
+         raise
+      end
+      string
    end
 end

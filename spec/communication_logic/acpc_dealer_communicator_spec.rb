@@ -46,10 +46,10 @@ describe AcpcDealerCommunicator do
       end
    end
    
-   describe "#puts" do
+   describe "#write" do
       it "properly sends actions to the dealer" do
          action = MATCH_STATE_LABEL + ":1:0:|" + arbitrary_hole_card_hand + ':c'
-         @patient.puts action
+         @patient.write action
          
          @client_connection.gets.chomp.should eq(action)
       end

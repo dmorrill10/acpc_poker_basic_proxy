@@ -10,10 +10,11 @@ class ActionSender
    
    # Sends the given +action+ to through the given +connection+ in the ACPC
    # format.
-   # @param [#puts] connection The connection through which the +action+
+   # @param [#write, #ready_to_write?] connection The connection through which the +action+
    #  should be sent.
    # @param [#to_s] match_state The current match state.
    # @param [#to_acpc] action The action to be sent through the +connection+.
+   # @return [Integer] The number of bytes written.
    # @raise (see #validate_match_state)
    # @raise (see #validate_action)
    def self.send_action(connection, match_state, action)
@@ -21,7 +22,7 @@ class ActionSender
       self.validate_action action
       
       full_action = match_state.to_s + ":#{action.to_acpc}"
-      connection.puts full_action
+      connection.write full_action
    end
    
    private
