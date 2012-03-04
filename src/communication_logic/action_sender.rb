@@ -35,7 +35,7 @@ class ActionSender
    def self.valid_match_state?(match_state)
       all_actions = PokerAction::LEGAL_ACPC_CHARACTERS.to_a.join
       all_ranks = CARD_RANKS.values.join
-      all_suits = CARD_SUITS.values.join
+      all_suits = (CARD_SUITS.values.map { |suit| suit[:acpc_character] }).join
       all_card_tokens = all_ranks + all_suits
       
       match_state.to_s.match(
