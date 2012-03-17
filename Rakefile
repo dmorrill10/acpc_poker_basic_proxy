@@ -15,17 +15,11 @@ task :build => :spec do
    system "gem build acpc_poker_basic_proxy.gemspec"
 end
 
-# @todo create helper rake task. Not sure if I'm doing this properly.
-
 task :tag => :build do
    tag_gem_version AcpcPokerBasicProxy::VERSION
 end
 
-desc 'Integrate this gem into a given app'
-task :integrate, :rel_app_path do |t, args|
-   Rake::Task[:tag].invoke
-   gem_name = "acpc_poker_basic_proxy-#{AcpcPokerBasicProxy::VERSION}.gem"
-   integrate_into_app args[:rel_app_path], gem_name
+task :install => :build do
 end
 
 #desc "release gem to gemserver"
