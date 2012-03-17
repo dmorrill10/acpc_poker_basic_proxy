@@ -42,67 +42,6 @@ module ModelTestHelper
       
       hole_card_sets   
    end
-   #
-   #def create_game_definition
-   #   game_definition = mock('GameDefinition')
-   #   game_definition.stubs(:number_of_players).returns(3)
-   #   game_definition.stubs(:minimum_wager_in_each_round).returns([10, 10, 20, 20])
-   #   game_definition.stubs(:first_player_position_in_each_round).returns([2, 1, 1, 1])
-   #   game_definition.stubs(:max_raise_in_each_round).returns([3, 4, 4, 4])
-   #   game_definition.stubs(:list_of_player_stacks).returns([20000, 20000, 20000])
-   #   game_definition.stubs(:big_blind).returns(10)
-   #   game_definition.stubs(:small_blind).returns(5)
-   #   
-   #   game_definition
-   #end
-   #
-   #def create_player_manager(game_definition)
-   #   player_manager = mock('PlayerManager')
-   #   
-   #   (player_who_submitted_big_blind, player_who_submitted_small_blind, other_player) = create_players game_definition.big_blind, game_definition.small_blind
-   #   
-   #   player_manager.stubs(:player_who_submitted_big_blind).returns(player_who_submitted_big_blind)      
-   #   player_manager.stubs(:player_who_submitted_small_blind).returns(player_who_submitted_small_blind)
-   #   player_manager.stubs(:players_who_did_not_submit_a_blind).returns([other_player])
-   #   
-   #   list_of_player_stacks = game_definition.list_of_player_stacks.dup
-   #   player_manager.stubs(:list_of_player_stacks).returns(list_of_player_stacks)
-   #   
-   #   player_manager
-   #end
-   #
-   #def create_players(big_blind, small_blind)
-   #   player_who_submitted_big_blind = mock('Player')
-   #   player_who_submitted_big_blind.stubs(:current_wager_faced=).with(0)
-   #   player_who_submitted_big_blind.stubs(:current_wager_faced).returns(0)
-   #   player_who_submitted_big_blind.stubs(:name).returns('big_blind_player')
-   #   
-   #   player_who_submitted_small_blind = mock('Player')
-   #   player_who_submitted_small_blind.stubs(:current_wager_faced=).with(big_blind - small_blind)
-   #   player_who_submitted_small_blind.stubs(:current_wager_faced).returns(big_blind - small_blind)
-   #   player_who_submitted_small_blind.stubs(:name).returns('small_blind_player')
-   #   
-   #   other_player = mock('Player')
-   #   other_player.stubs(:current_wager_faced=).with(big_blind)
-   #   other_player.stubs(:current_wager_faced).returns(big_blind)
-   #   other_player.stubs(:name).returns('other_player')
-   #   
-   #   [player_who_submitted_big_blind, player_who_submitted_small_blind, other_player]
-   #end
-   #   
-   #def setup_action_test(match_state, action_type, action_argument = '')
-   #   action = action_argument + action_type
-   #   expected_string = raw_match_state_string match_state, action
-   #   
-   #   expected_string
-   #end
-   #
-   #
-   ## Helper methods -----------------------------------------------------------
-   #
-   #def raw_match_state_string(match_state, action)
-   #   "#{match_state}:#{action}"
-   #end
    
    # Construct an arbitrary hole card hand.
    #
