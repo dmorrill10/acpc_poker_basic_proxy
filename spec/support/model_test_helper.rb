@@ -46,7 +46,7 @@ module ModelTestHelper
    #def create_game_definition
    #   game_definition = mock('GameDefinition')
    #   game_definition.stubs(:number_of_players).returns(3)
-   #   game_definition.stubs(:raise_size_in_each_round).returns([10, 10, 20, 20])
+   #   game_definition.stubs(:minimum_wager_in_each_round).returns([10, 10, 20, 20])
    #   game_definition.stubs(:first_player_position_in_each_round).returns([2, 1, 1, 1])
    #   game_definition.stubs(:max_raise_in_each_round).returns([3, 4, 4, 4])
    #   game_definition.stubs(:list_of_player_stacks).returns([20000, 20000, 20000])
@@ -109,8 +109,12 @@ module ModelTestHelper
    # @return [Mock Hand] An arbitrary hole card hand.
    def arbitrary_hole_card_hand
       hand = mock('Hand')
-      hand.stubs(:to_str).returns(AcpcPokerTypesDefs::CARD_RANKS[:two] + AcpcPokerTypesDefs::CARD_SUITS[:spades] + AcpcPokerTypesDefs::CARD_RANKS[:three] + AcpcPokerTypesDefs::CARD_SUITS[:hearts])
-      hand.stubs(:to_s).returns(AcpcPokerTypesDefs::CARD_RANKS[:two] + AcpcPokerTypesDefs::CARD_SUITS[:spades] + AcpcPokerTypesDefs::CARD_RANKS[:three] + AcpcPokerTypesDefs::CARD_SUITS[:hearts])
+      hand_as_string = AcpcPokerTypesDefs::CARD_RANKS[:two]
+         + AcpcPokerTypesDefs::CARD_SUITS[:spades][:acpc_character]
+         + AcpcPokerTypesDefs::CARD_RANKS[:three]
+         + AcpcPokerTypesDefs::CARD_SUITS[:hearts][:acpc_character]
+      hand.stubs(:to_str).returns(hand_as_string)
+      hand.stubs(:to_s).returns(hand_as_string)
       
       hand
    end
