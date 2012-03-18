@@ -19,9 +19,6 @@ task :tag => :build do
    tag_gem_version AcpcPokerBasicProxy::VERSION
 end
 
-task :install => :build do
-end
-
 #desc "release gem to gemserver"
 #task :release => [:tag, :deploy] do
 #  puts "congrats, the gem is now tagged, pushed, deployed and released! Rember to up the VERSION number"

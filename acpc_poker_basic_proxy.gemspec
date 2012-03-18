@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{ACPC Poker Basic Proxy}
   s.description = %q{Basic proxy to connect to the ACPC Dealer.}
   
-  s.add_development_dependency 'acpc_poker_types'
+  s.add_dependency 'acpc_poker_types'
   
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'mocha'
