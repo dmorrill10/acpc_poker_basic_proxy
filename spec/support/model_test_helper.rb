@@ -10,7 +10,7 @@ module ModelTestHelper
       user_position = 1;
       hand_number = 0
       hole_card_hand = arbitrary_hole_card_hand
-      initial_match_state = mock('MatchstateString')
+      initial_match_state = mock('MatchStateString')
       initial_match_state.stubs(:position_relative_to_dealer).returns(user_position)
       initial_match_state.stubs(:hand_number).returns(hand_number)
       initial_match_state.stubs(:list_of_board_cards).returns([])

@@ -24,9 +24,9 @@ class BasicProxy
       ActionSender.send_action @dealer_communicator, @match_state, action
    end
    
-   # @see MatchstateStringReceiver#receive_match_state_string
+   # @see MatchStateStringReceiver#receive_match_state_string
    def receive_match_state_string(acting_player_sees_wager=true)
-      (match_state_to_return, @match_state) = MatchstateStringReceiver.receive_matchstate_string @dealer_communicator, acting_player_sees_wager
+      (match_state_to_return, @match_state) = MatchStateStringReceiver.receive_matchstate_string @dealer_communicator, acting_player_sees_wager
       match_state_to_return
    end
 end

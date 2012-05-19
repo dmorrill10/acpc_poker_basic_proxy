@@ -9,7 +9,7 @@ require File.expand_path('../../src/basic_proxy', __FILE__)
 
 describe BasicProxy do
    before(:each) do
-      @mock_match_state = mock 'MatchstateString'
+      @mock_match_state = mock 'MatchStateString'
       
       port_number = 9001
       host_name = 'localhost'
@@ -43,7 +43,7 @@ describe BasicProxy do
    end
    
    def receive_a_match_state
-      MatchstateStringReceiver.stubs(:receive_matchstate_string).returns([@mock_match_state, @mock_match_state.to_s])
+      MatchStateStringReceiver.stubs(:receive_matchstate_string).returns([@mock_match_state, @mock_match_state.to_s])
       
       @patient.receive_match_state_string.should be @mock_match_state
       @patient.instance_eval{ @match_state }.should == @mock_match_state.to_s
