@@ -1,6 +1,6 @@
 
-# @todo Only want AcpcPokerTypesDefs and easy_exceptions here, is there a way to select this?
-require 'acpc_poker_types'
+require 'acpc_poker_types/acpc_poker_types_defs'
+require 'acpc_poker_types/mixins/utils'
 
 # Sends poker actions according to the ACPC protocol.
 class ActionSender
@@ -18,8 +18,8 @@ class ActionSender
    # @raise (see #validate_match_state)
    # @raise (see #validate_action)
    def self.send_action(connection, match_state, action)
-      self.validate_match_state match_state
-      self.validate_action action
+      validate_match_state match_state
+      validate_action action
       
       full_action = match_state.to_s + ":#{action.to_acpc}"
       connection.write full_action
@@ -29,7 +29,7 @@ class ActionSender
    
    # @raise IllegalMatchStateFormat
    def self.validate_match_state(match_state)
-      raise IllegalMatchStateFormat unless self.valid_match_state?(match_state)
+      raise IllegalMatchStateFormat unless valid_match_state?(match_state)
    end
    
    def self.valid_match_state?(match_state)
