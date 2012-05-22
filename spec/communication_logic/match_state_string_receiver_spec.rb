@@ -19,7 +19,7 @@ describe MatchStateStringReceiver do
       it 'receives matchstate strings properly' do
          DealerData::DATA.each do |num_players, data_by_num_players|
             data_by_num_players.each do |type, data_by_type|
-               turns = data_by_type[:actions].dup
+               turns = data_by_type[:actions]
                
                # Sample the dealer match string data
                number_of_tests = 100

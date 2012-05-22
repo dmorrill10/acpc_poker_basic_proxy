@@ -3,7 +3,7 @@
 require File.expand_path('../communication_logic/acpc_dealer_communicator', __FILE__)
 require File.expand_path('../communication_logic/acpc_dealer_information', __FILE__)
 require File.expand_path('../communication_logic/action_sender', __FILE__)
-require File.expand_path('../communication_logic/matchstate_string_receiver', __FILE__)
+require File.expand_path('../communication_logic/match_state_string_receiver', __FILE__)
 
 # A bot that connects to a dealer as a proxy.
 class BasicProxy
@@ -25,8 +25,7 @@ class BasicProxy
    end
    
    # @see MatchStateStringReceiver#receive_match_state_string
-   def receive_match_state_string(acting_player_sees_wager=true)
-      (match_state_to_return, @match_state) = MatchStateStringReceiver.receive_matchstate_string @dealer_communicator, acting_player_sees_wager
-      match_state_to_return
+   def receive_match_state_string!
+      @match_state = MatchStateStringReceiver.receive_matchstate_string @dealer_communicator
    end
 end

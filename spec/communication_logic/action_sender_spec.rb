@@ -59,7 +59,7 @@ describe ActionSender do
       it 'works for all test data examples' do
          DealerData::DATA.each do |num_players, data_by_num_players|
             data_by_num_players.each do |type, data_by_type|
-               turns = data_by_type[:actions].dup
+               turns = data_by_type[:actions]
                
                # Sample the dealer match string and action data
                number_of_tests = 100
@@ -77,8 +77,6 @@ describe ActionSender do
                   
                   action = from_player_message[seat_taking_action]
                   @mock_action.stubs(:to_acpc).returns(action)
-                  
-                  
                   
                   @match_state = MatchStateString.parse turn[:to_players][seat_taking_action]
                   action_that_should_be_sent = "#{@match_state}:#{action}"

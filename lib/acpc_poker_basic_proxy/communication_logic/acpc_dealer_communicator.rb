@@ -26,7 +26,7 @@ class AcpcDealerCommunicator
    # @param [String] host_name The host on which the dealer is running.
    # @param [Integer] millisecond_response_timeout The dealer's response timeout, in milleseconds.
    # @raise AcpcDealerConnectionError, PutToAcpcDealerError
-   def initialize(port, host_name = 'localhost', millisecond_response_timeout=nil)
+   def initialize(port, host_name='localhost', millisecond_response_timeout=nil)
       begin         
          @dealer_socket = TCPSocket.new(host_name, port)
          @response_timeout_in_seconds = if millisecond_response_timeout

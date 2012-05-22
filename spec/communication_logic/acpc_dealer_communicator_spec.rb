@@ -4,24 +4,20 @@ require File.expand_path('../../support/spec_helper', __FILE__)
 # System
 require 'socket'
 
-# Gems
-require 'acpc_poker_types'
-
 # Local modules
-require File.expand_path('../../../src/acpc_poker_basic_proxy_defs', __FILE__)
-require File.expand_path('../../support/model_test_helper', __FILE__)
+require File.expand_path('../../../lib/acpc_poker_basic_proxy/acpc_poker_basic_proxy_defs', __FILE__)
 
 # Local classes
-require File.expand_path('../../../src/communication_logic/acpc_dealer_communicator', __FILE__)
+require File.expand_path('../../../lib/acpc_poker_basic_proxy/communication_logic/acpc_dealer_communicator', __FILE__)
 
 describe AcpcDealerCommunicator do
    include AcpcPokerBasicProxyDefs
-   include AcpcPokerTypesDefs
-   include ModelTestHelper
    
    before(:each) do
       start_test_connection 0
-      @client_connection.gets.chomp.should eq("#{VERSION_LABEL}:#{VERSION_NUMBERS[:major]}.#{VERSION_NUMBERS[:minor]}.#{VERSION_NUMBERS[:revision]}")
+      @client_connection.gets.chomp.should eq("#{AcpcPokerBasicProxyDefs::VERSION_LABEL}:#{AcpcPokerBasicProxyDefs::VERSION_NUMBERS[:major]}.#{AcpcPokerBasicProxyDefs::VERSION_NUMBERS[:minor]}.#{AcpcPokerBasicProxyDefs::VERSION_NUMBERS[:revision]}")
+      
+      @match_state = 'MATCHSTATE:0:0::5d5c'
    end
   
    after(:each) do
@@ -48,7 +44,7 @@ describe AcpcDealerCommunicator do
    
    describe "#write" do
       it "properly sends actions to the dealer" do
-         action = MATCH_STATE_LABEL + ":1:0:|" + arbitrary_hole_card_hand + ':c'
+         action = @match_state + ':c'
          @patient.write action
          
          @client_connection.gets.chomp.should eq(action)
@@ -57,9 +53,8 @@ describe AcpcDealerCommunicator do
    
    describe "#gets" do
       it "properly receives matchstate strings from the dealer" do
-         matchstate_string = MATCH_STATE_LABEL + ":1:0:|" + arbitrary_hole_card_hand
-         @client_connection.puts matchstate_string
-         @patient.gets.should eq(matchstate_string)
+         @client_connection.puts @match_state
+         @patient.gets.should eq(@match_state)
       end
    end
    
