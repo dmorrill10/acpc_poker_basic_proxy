@@ -6,11 +6,12 @@ Gem::Specification.new do |s|
   s.version     = AcpcPokerBasicProxy::VERSION
   s.authors     = ["Dustin Morrill"]
   s.email       = ["morrill@ualberta.ca"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/dmorrill10/acpc_poker_basic_proxy"
   s.summary     = %q{ACPC Poker Basic Proxy}
   s.description = %q{Basic proxy to connect to the ACPC Dealer.}
   
   s.add_dependency 'acpc_poker_types'
+  s.add_dependency 'dmorrill10-utils'
   
   s.rubyforge_project = "acpc_poker_basic_proxy"
 

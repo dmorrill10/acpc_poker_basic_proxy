@@ -67,7 +67,7 @@ class AcpcDealerCommunicator
     begin
       bytes_written = send_string_to_dealer string
     rescue
-      handle_error WriteToAcpcDealerError, "Unable to send the string, \"#{string}\", to the dealer: #{$?}."
+      handle_error GetFromAcpcDealerError, "Unable to send the string, \"#{string}\", to the dealer: #{$?}."
     end
     bytes_written
   end
