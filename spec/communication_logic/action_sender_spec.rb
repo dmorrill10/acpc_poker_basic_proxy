@@ -3,18 +3,22 @@ require File.expand_path('../../support/spec_helper', __FILE__)
 
 require 'acpc_poker_types/poker_action'
 require 'acpc_poker_types/match_state'
-
-require File.expand_path('../../support/dealer_data', __FILE__)
+require 'acpc_dealer'
+require 'acpc_dealer_data'
 
 require File.expand_path('../../../lib/acpc_poker_basic_proxy/communication_logic/action_sender', __FILE__)
 
 describe ActionSender do
-  include DealerData
-
   before(:each) do
     @connection = mock 'AcpcDealerCommunicator'
     @mock_action = mock 'PokerAction'
-    @match_state = MatchState.parse DealerData::DATA[2][:limit][:actions].first[:to_players]['1']
+    @match_state = PokerMatchData.parse_files(
+      match_logs[0].actions_file_path,
+      match_logs[0].results_file_path,
+      match_logs[0].player_names,
+      AcpcDealer::DEALER_DIRECTORY,
+      1
+    ).data[0].data[0].action_message.state
   end
 
   describe "#send_action" do
@@ -61,33 +65,29 @@ describe ActionSender do
       end
     end
     it 'works for all test data examples' do
-      DealerData::DATA.each do |num_players, data_by_num_players|
-        data_by_num_players.each do |type, data_by_type|
-          turns = data_by_type[:actions]
+      match_logs.each do |log_description|
+        match = PokerMatchData.parse_files(
+          log_description.actions_file_path,
+          log_description.results_file_path,
+          log_description.player_names,
+          AcpcDealer::DEALER_DIRECTORY,
+          10
+        )
+        match.for_every_seat! do |seat|
+          match.for_every_hand! do
+            match.for_every_turn! do
+              next unless match.current_hand.next_action
+              
+              from_player_message = match.current_hand.next_action.state
+              seat_taking_action = match.current_hand.next_action.seat
+              action = match.current_hand.next_action.action
 
-          # Sample the dealer match string and action data
-          number_of_tests = 100
-          number_of_tests.times do |i|
-            turn = if !turns[i * (turns.length/number_of_tests)][:from_players].empty?
-              turns[i * (turns.length/number_of_tests)]
-            elsif !turns[i * (turns.length/number_of_tests) + 1][:from_players].empty?
-              turns[i * (turns.length/number_of_tests) + 1]
-            else
-              turns[i * (turns.length/number_of_tests) - 1]
+              action_that_should_be_sent = "#{from_player_message.to_s}:#{action.to_acpc}"
+
+              @connection.expects(:write).once.with(action_that_should_be_sent)
+
+              ActionSender.send_action @connection, from_player_message, action
             end
-
-            from_player_message = turn[:from_players]
-            seat_taking_action = from_player_message.keys.first
-
-            action = from_player_message[seat_taking_action]
-            @mock_action.stubs(:to_acpc).returns(action)
-
-            @match_state = MatchState.parse turn[:to_players][seat_taking_action]
-            action_that_should_be_sent = "#{@match_state}:#{action}"
-
-            @connection.expects(:write).once.with(action_that_should_be_sent)
-
-            ActionSender.send_action @connection, @match_state, @mock_action
           end
         end
       end
