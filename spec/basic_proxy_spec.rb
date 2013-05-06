@@ -42,7 +42,7 @@ describe BasicProxy do
 
             @dealer_communicator.stubs(:gets).returns(match_state.to_s)
 
-            @patient.receive_match_state!.should == match_state
+            @patient.receive_match_state!.must_equal match_state
 
             if action && match_state == match.current_hand.next_action.state && match.current_hand.next_action.seat == seat
 
