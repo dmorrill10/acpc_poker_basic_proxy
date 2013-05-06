@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'turn', '~> 0.9'
   s.add_development_dependency 'minitest', '~> 4.7'
+  s.add_development_dependency 'mocha', '~> 0.13'
   s.add_development_dependency 'acpc_dealer', '~> 0.0'
   s.add_development_dependency 'awesome_print', '~> 1.0'
   s.add_development_dependency 'pry-rescue', '~> 1.0'

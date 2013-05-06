@@ -1,12 +1,18 @@
 
-require File.expand_path('../support/spec_helper', __FILE__)
+require_relative 'support/spec_helper'
 
 require 'acpc_poker_types/match_state'
 require 'acpc_poker_types/poker_action'
-require 'acpc_dealer_data'
+require 'acpc_poker_types/acpc_dealer_data/poker_match_data'
 require 'acpc_dealer'
 
-require File.expand_path('../../lib/acpc_poker_basic_proxy/basic_proxy', __FILE__)
+require 'acpc_poker_basic_proxy/basic_proxy'
+require 'acpc_poker_basic_proxy/communication_logic/action_sender'
+
+include AcpcPokerBasicProxy
+include AcpcPokerTypes
+include CommunicationLogic
+include AcpcDealerData
 
 describe BasicProxy do
   before(:each) do
@@ -58,7 +64,7 @@ describe BasicProxy do
 
   describe '#send_action' do
     it 'raises an exception if a match state was not received before an action was sent' do
-      expect{@patient.send_action(mock('PokerAction'))}.to raise_exception(BasicProxy::InitialMatchStateNotYetReceived)
+      -> {@patient.send_action(mock('PokerAction'))}.must_raise BasicProxy::InitialMatchStateNotYetReceived
     end
   end
 end

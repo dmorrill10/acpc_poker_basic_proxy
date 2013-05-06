@@ -4,6 +4,7 @@ SimpleCov.start
 require 'minitest/spec'
 require 'minitest/pride'
 require 'minitest/mock'
+require 'mocha/setup'
 
 begin
   require 'turn'
@@ -29,7 +30,6 @@ begin
   end
 
   require 'pry-rescue/minitest'
-  require 'mocha/setup'
 rescue LoadError
 end
 

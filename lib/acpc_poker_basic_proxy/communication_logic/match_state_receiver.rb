@@ -11,7 +11,7 @@ module AcpcPokerBasicProxy
       # @return [MatchState] The match state string that was received from the +connection+ or +nil+ if none could be received.
       def self.receive_match_state(connection)
         raw_match_state = connection.gets
-        MatchState.parse raw_match_state
+        AcpcPokerTypes::MatchState.parse raw_match_state
       end
     end
   end
