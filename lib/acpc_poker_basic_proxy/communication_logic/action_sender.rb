@@ -1,7 +1,9 @@
 
-require 'dmorrill10-utils/class'
 require 'acpc_poker_types/poker_action'
 require 'acpc_poker_types/match_state'
+
+require 'contextual_exceptions'
+using ContextualExceptions::ClassRefinement
 
 # Sends poker actions according to the ACPC protocol.
 module AcpcPokerBasicProxy

@@ -1,5 +1,4 @@
-require 'acpc_poker_basic_proxy/communication_logic/acpc_dealer_communicator'
-require 'acpc_poker_basic_proxy/communication_logic/acpc_dealer_information'
+require 'acpc_poker_basic_proxy/communication_logic/dealer_stream'
 require 'acpc_poker_basic_proxy/communication_logic/match_state_receiver'
 require 'acpc_poker_basic_proxy/communication_logic/action_sender'
 

@@ -5,7 +5,7 @@ require 'acpc_dealer'
 require 'acpc_poker_types'
 
 require 'acpc_poker_basic_proxy/communication_logic/match_state_receiver'
-require 'acpc_poker_basic_proxy/communication_logic/acpc_dealer_communicator'
+require 'acpc_poker_basic_proxy/communication_logic/dealer_stream'
 
 describe AcpcPokerBasicProxy::CommunicationLogic::MatchStateReceiver do
   before(:each) do

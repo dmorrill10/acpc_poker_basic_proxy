@@ -2,12 +2,12 @@ require 'simplecov'
 SimpleCov.start
 
 require 'minitest/spec'
-require 'minitest/pride'
 require 'minitest/mock'
+
 require 'mocha/setup'
 
 begin
-  require 'turn'
+  require 'turn/autorun'
 
   Turn.config do |c|
     # use one of output formats:

@@ -1,9 +1,9 @@
 
 require_relative 'support/spec_helper'
 
+require 'acpc_poker_types/acpc_dealer_data/poker_match_data'
 require 'acpc_poker_types/poker_action'
 require 'acpc_poker_types/match_state'
-require 'acpc_poker_types/acpc_dealer_data/poker_match_data'
 require 'acpc_dealer'
 
 require 'acpc_poker_basic_proxy/communication_logic/action_sender'
