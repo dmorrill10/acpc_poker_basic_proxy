@@ -3,10 +3,9 @@ require_relative 'support/spec_helper'
 
 require 'socket'
 
-require 'acpc_poker_basic_proxy/communication_logic/dealer_stream'
+require 'acpc_poker_basic_proxy/dealer_stream'
 
 include AcpcPokerBasicProxy
-include CommunicationLogic
 
 describe DealerStream do
   after do
