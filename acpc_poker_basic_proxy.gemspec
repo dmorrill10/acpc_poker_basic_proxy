@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{ACPC Poker Basic Proxy}
   s.description = %q{Basic proxy to connect to the ACPC Dealer.}
 
-  s.add_dependency 'acpc_poker_types', '~> 4.0'
+  s.add_dependency 'acpc_poker_types', '~> 5.0'
   s.add_dependency 'contextual_exceptions', '~> 0.0'
 
   s.rubyforge_project = "acpc_poker_basic_proxy"
