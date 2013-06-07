@@ -24,10 +24,6 @@ describe DealerStream do
     end
   end
   describe "#ready_to_read?" do
-    it 'lets the caller know that there is not new input from the dealer' do
-      connect_successfully!
-      @patient.ready_to_read?.must_equal false
-    end
     it 'lets the caller know that there is new input from the dealer' do
       connect_successfully!
       @client_connection.puts "New input"
@@ -55,12 +51,6 @@ describe DealerStream do
       @client_connection.puts @match_state
       @patient.gets.must_equal(@match_state)
     end
-    it 'disconnects if the timeout is reached' do
-      [0, 100].each do |t|
-        start_test_connection! t
-        -> { @patient.gets }.must_raise DealerStream::UnableToGetFromDealer
-      end
-    end
   end
 
   def end_test_connection!
@@ -68,12 +58,11 @@ describe DealerStream do
     @client_connection.close if @client_connection && !@client_connection.closed?
   end
 
-  def start_test_connection!(millisecond_response_timeout = 0, port = 0)
+  def start_test_connection!(port = 0)
     fake_dealer = TCPServer.open(port)
     @patient = DealerStream.new(
       fake_dealer.addr[1],
-      'localhost',
-      millisecond_response_timeout
+      'localhost'
     )
     @client_connection = fake_dealer.accept
   end

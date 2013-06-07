@@ -41,7 +41,10 @@ module AcpcPokerBasicProxy
 
     # @param [AcpcDealer::ConnectionInformation] dealer_information Information about the dealer to which this bot should connect.
     def initialize(dealer_information)
-      @dealer_communicator = DealerStream.new dealer_information.port_number, dealer_information.host_name, dealer_information.millisecond_response_timeout
+      @dealer_communicator = DealerStream.new(
+        dealer_information.port_number,
+        dealer_information.host_name
+      )
     end
 
     # @param [PokerAction] action The action to be sent.

@@ -17,10 +17,10 @@ describe BasicProxy do
     port_number = 9001
     host_name = 'localhost'
     millisecond_response_timeout = 0
-    delaer_info = AcpcDealer::ConnectionInformation.new port_number, host_name, millisecond_response_timeout
+    delaer_info = AcpcDealer::ConnectionInformation.new port_number, host_name
     @dealer_communicator = mock 'DealerStream'
 
-    DealerStream.expects(:new).once.with(port_number, host_name, millisecond_response_timeout).returns(@dealer_communicator)
+    DealerStream.expects(:new).once.with(port_number, host_name).returns(@dealer_communicator)
 
     @patient = BasicProxy.new delaer_info
 
