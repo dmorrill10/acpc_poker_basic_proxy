@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{ACPC Poker Basic Proxy}
   s.description = %q{Basic proxy to connect to the ACPC Dealer.}
 
-  s.add_dependency 'acpc_poker_types', '~> 5.0'
+  s.add_dependency 'acpc_poker_types', '~> 7.0'
   s.add_dependency 'contextual_exceptions', '~> 0.0'
 
   s.rubyforge_project = "acpc_poker_basic_proxy"
@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.test_files    = Dir.glob "spec/**/*"
   s.require_paths = ["lib"]
 
-  s.add_development_dependency 'turn', '~> 0.9'
   s.add_development_dependency 'minitest', '~> 4.7'
   s.add_development_dependency 'mocha', '~> 0.13'
   s.add_development_dependency 'awesome_print', '~> 1.0'

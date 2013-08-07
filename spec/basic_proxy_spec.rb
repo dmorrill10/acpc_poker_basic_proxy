@@ -3,14 +3,14 @@ require_relative 'support/spec_helper'
 
 require 'acpc_poker_types/match_state'
 require 'acpc_poker_types/poker_action'
-require 'acpc_poker_types/acpc_dealer_data/poker_match_data'
+require 'acpc_poker_types/dealer_data/poker_match_data'
 require 'acpc_dealer'
 
 require 'acpc_poker_basic_proxy/basic_proxy'
 
 include AcpcPokerBasicProxy
 include AcpcPokerTypes
-include AcpcDealerData
+include DealerData
 
 describe BasicProxy do
   before(:each) do
@@ -25,7 +25,7 @@ describe BasicProxy do
     @patient = BasicProxy.new delaer_info
 
     @connection = MiniTest::Mock.new
-    @match_state = AcpcDealerData::PokerMatchData.parse_files(
+    @match_state = PokerMatchData.parse_files(
       MatchLog.all[0].actions_file_path,
       MatchLog.all[0].results_file_path,
       MatchLog.all[0].player_names,
@@ -79,11 +79,6 @@ describe BasicProxy do
         BasicProxy.send_action(@connection, @match_state, 'illegal action format')
       end.must_raise BasicProxy::IllegalActionFormat
     end
-    it 'raises an exception if the given match state does not have the proper format' do
-      -> do
-        BasicProxy.send_action(@connection, 'illegal match state format', PokerAction::CALL)
-      end.must_raise MatchState::IncompleteMatchState
-    end
     it 'can send all legal actions through the provided connection without a modifier' do
       PokerAction::ACTIONS.each do |action|
         action_that_should_be_sent = @match_state.to_s + ":#{action}"
@@ -111,7 +106,7 @@ describe BasicProxy do
     end
     it 'works for all test data examples' do
       MatchLog.all.each do |log_description|
-        match = AcpcDealerData::PokerMatchData.parse_files(
+        match = PokerMatchData.parse_files(
           log_description.actions_file_path,
           log_description.results_file_path,
           log_description.player_names,
