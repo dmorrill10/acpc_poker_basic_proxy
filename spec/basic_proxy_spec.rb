@@ -19,7 +19,7 @@ describe BasicProxy do
   let(:delaer_info) do
     AcpcDealer::ConnectionInformation.new port_number, host_name
   end
-  let(:dealer_communicator) { MiniTest::Mock.new 'DealerStream' }
+  let(:dealer_communicator) { MiniTest::Mock.new }
 
   let(:patient) do
     fussy = ->(port, host) do
@@ -70,8 +70,9 @@ describe BasicProxy do
               match_state == match.current_hand.next_action.state &&
               match.current_hand.next_action.seat == seat
             )
+              dealer_communicator.expect :call, nil
               fussy = ->(dealer_communicator_, match_state_, action_) do
-                dealer_communicator_.must_equal dealer_communicator
+                dealer_communicator_.call
                 match_state_.must_equal match_state.to_s
                 action_.must_equal action
               end
@@ -112,7 +113,7 @@ describe BasicProxy do
   end
   describe '#send_action' do
     it 'raises an exception if a match state was not received before an action was sent' do
-      -> {patient.send_action(MiniTest::Mock.new('PokerAction'))}.must_raise(
+      -> {patient.send_action(MiniTest::Mock.new)}.must_raise(
         BasicProxy::InitialMatchStateNotYetReceived
       )
     end
