@@ -163,7 +163,6 @@ describe BasicProxy do
               next unless match.current_hand.next_action
 
               from_player_message = match.current_hand.next_action.state
-              seat_taking_action = match.current_hand.next_action.seat
               action = match.current_hand.next_action.action
 
               action_that_should_be_sent = "#{from_player_message.to_s}:#{action.to_acpc}"

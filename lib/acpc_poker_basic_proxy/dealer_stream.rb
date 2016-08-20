@@ -63,6 +63,7 @@ module AcpcPokerBasicProxy
     # @param [String] host_name The host on which the dealer is running. Defaults to 'localhost'
     # @raise AcpcDealerConnectionError, UnableToWriteToDealer
     def initialize(port, host_name='localhost')
+      @dealer_socket = nil
       begin
         @dealer_socket = TCPSocket.new(host_name, port)
         super @dealer_socket
@@ -94,7 +95,7 @@ module AcpcPokerBasicProxy
     # @raise UnableToWriteToDealer
     def write(string)
       begin
-        num_bytes_written = send_string_to_dealer string
+        send_string_to_dealer string
       rescue => e
         handle_error UnableToWriteToDealer, "Unable to send the string, \"#{string}\", to the dealer", e
       end

@@ -66,6 +66,7 @@ module AcpcPokerBasicProxy
         dealer_information.port_number,
         dealer_information.host_name
       )
+      @match_state = nil
     end
 
     # @param [PokerAction] action The action to send.
