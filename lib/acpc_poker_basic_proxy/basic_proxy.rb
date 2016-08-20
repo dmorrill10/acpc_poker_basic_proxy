@@ -16,9 +16,9 @@ module AcpcPokerBasicProxy
     # Sends the given +action+ to through the given +connection+ in the ACPC
     # format.
     # @param [#write, #ready_to_write?] connection The connection through which the +action+
-    #  should be sent.
+    #  should send.
     # @param [#to_s] match_state The current match state.
-    # @param [#to_s] action The action to be sent through the +connection+.
+    # @param [#to_s] action The action to send through the +connection+.
     # @return [Integer] The number of bytes written.
     # @raise (see #validate_match_state)
     # @raise (see #validate_action)
@@ -27,6 +27,15 @@ module AcpcPokerBasicProxy
 
       full_action = "#{AcpcPokerTypes::MatchState.parse(match_state.to_s)}:#{action.to_s}"
       connection.write full_action
+    end
+
+    # Sends a comment the given +connection+.
+    # @param [#write, #ready_to_write?] connection The connection through which the +action+
+    #  should send.
+    # @param [#to_s] comment The comment to send through the +connection+.
+    # @return [Integer] The number of bytes written.
+    def self.send_comment(connection, comment)
+      connection.write comment
     end
 
     # @raise IllegalActionFormat
@@ -47,13 +56,19 @@ module AcpcPokerBasicProxy
       )
     end
 
-    # @param [PokerAction] action The action to be sent.
-    # @return (see ActionSender#send_action)
+    # @param [PokerAction] action The action to send.
+    # @return (see BasicProxy#send_action)
     # @raise InitialMatchStateNotYetReceived
-    # @raise (see ActionSender#send_action)
+    # @raise (see BasicProxy#send_action)
     def send_action(action)
       raise InitialMatchStateNotYetReceived unless @match_state
       BasicProxy.send_action @dealer_communicator, @match_state, action
+    end
+
+    # @param [#to_s] comment The comment to send.
+    # @return (see BasicProxy#send_action)
+    def send_comment(comment)
+      BasicProxy.send_comment @dealer_communicator, comment
     end
 
     # @see MatchStateReceiver#receive_match_state
