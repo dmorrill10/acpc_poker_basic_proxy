@@ -13,19 +13,27 @@ include AcpcPokerTypes
 include DealerData
 
 describe BasicProxy do
-  before(:each) do
-    port_number = 9001
-    host_name = 'localhost'
-    millisecond_response_timeout = 0
-    delaer_info = AcpcDealer::ConnectionInformation.new port_number, host_name
-    @dealer_communicator = mock 'DealerStream'
+  let(:port_number) { 9001 }
+  let(:host_name) { 'localhost' }
+  let(:millisecond_response_timeout) { 0 }
+  let(:delaer_info) do
+    AcpcDealer::ConnectionInformation.new port_number, host_name
+  end
+  let(:dealer_communicator) { MiniTest::Mock.new 'DealerStream' }
 
-    DealerStream.expects(:new).once.with(port_number, host_name).returns(@dealer_communicator)
+  let(:patient) do
+    fussy = ->(port, host) do
+      host.must_equal host_name
+      port.must_equal port_number
+      dealer_communicator
+    end
+    DealerStream.stub :new, fussy do
+      BasicProxy.new delaer_info
+    end
+  end
 
-    @patient = BasicProxy.new delaer_info
-
-    @connection = MiniTest::Mock.new
-    @match_state = PokerMatchData.parse_files(
+  let(:match_state) do
+    PokerMatchData.parse_files(
       MatchLog.all[0].actions_file_path,
       MatchLog.all[0].results_file_path,
       MatchLog.all[0].player_names,
@@ -53,55 +61,91 @@ describe BasicProxy do
             end
             match_state = match.current_hand.current_match_state
 
-            @dealer_communicator.stubs(:gets).returns(match_state.to_s)
+            dealer_communicator.stub :gets, match_state.to_s do
+              patient.receive_match_state!.must_equal match_state
+            end
 
-            @patient.receive_match_state!.must_equal match_state
-
-            if action && match_state == match.current_hand.next_action.state && match.current_hand.next_action.seat == seat
-
-              BasicProxy.expects(:send_action).once.with(@dealer_communicator, match_state.to_s, action)
-
-              @patient.send_action(action)
+            if (
+              action &&
+              match_state == match.current_hand.next_action.state &&
+              match.current_hand.next_action.seat == seat
+            )
+              fussy = ->(dealer_communicator_, match_state_, action_) do
+                dealer_communicator_.must_equal dealer_communicator
+                match_state_.must_equal match_state.to_s
+                action_.must_equal action
+              end
+              BasicProxy.stub :send_action, fussy do
+                patient.send_action(action)
+              end
             end
           end
         end
       end
     end
   end
-  describe '#send_action' do
-    it 'raises an exception if a match state was not received before an action was sent' do
-      -> {@patient.send_action(mock('PokerAction'))}.must_raise BasicProxy::InitialMatchStateNotYetReceived
+  describe '::send_comment' do
+    it 'works' do
+      comment = 'this is a comment'
+      dealer_communicator.expect :write, nil, ["##{comment}"]
+      BasicProxy.send_comment(dealer_communicator, comment)
     end
   end
-  describe "#send_action" do
+  describe '::send_ready' do
+    it 'works' do
+      dealer_communicator.expect :write, nil, [DealerStream::READY_MESSAGE]
+      BasicProxy.send_ready(dealer_communicator)
+    end
+  end
+  describe '#send_comment' do
+    it 'works' do
+      comment = 'this is a comment'
+      dealer_communicator.expect :write, nil, ["##{comment}"]
+      patient.send_comment(comment)
+    end
+  end
+  describe '#send_ready' do
+    it 'works' do
+      dealer_communicator.expect :write, nil, [DealerStream::READY_MESSAGE]
+      patient.send_ready
+    end
+  end
+  describe '#send_action' do
+    it 'raises an exception if a match state was not received before an action was sent' do
+      -> {patient.send_action(MiniTest::Mock.new('PokerAction'))}.must_raise(
+        BasicProxy::InitialMatchStateNotYetReceived
+      )
+    end
+  end
+  describe "::send_action" do
     it 'does not send an illegal action and raises an exception' do
       -> do
-        BasicProxy.send_action(@connection, @match_state, 'illegal action format')
+        BasicProxy.send_action(dealer_communicator, match_state, 'illegal action format')
       end.must_raise BasicProxy::IllegalActionFormat
     end
-    it 'can send all legal actions through the provided connection without a modifier' do
+    it 'can send all legal actions through the provided dealer_communicator without a modifier' do
       PokerAction::ACTIONS.each do |action|
-        action_that_should_be_sent = @match_state.to_s + ":#{action}"
-        @connection.expect :write, nil, [action_that_should_be_sent]
+        action_that_should_be_sent = match_state.to_s + ":#{action}"
+        dealer_communicator.expect :write, nil, [action_that_should_be_sent]
 
-        BasicProxy.send_action @connection, @match_state, action
+        BasicProxy.send_action dealer_communicator, match_state, action
       end
     end
     it 'does not send legal unmodifiable actions that have a modifier and raises an exception' do
       (PokerAction::ACTIONS - PokerAction::MODIFIABLE_ACTIONS).each do |unmodifiable_action|
         -> do
-          BasicProxy.send_action(@connection, @match_state, unmodifiable_action + 9001.to_s)
+          BasicProxy.send_action(dealer_communicator, match_state, unmodifiable_action + 9001.to_s)
         end.must_raise BasicProxy::IllegalActionFormat
       end
     end
-    it 'can send all legal modifiable actions through the provided connection with a modifier' do
+    it 'can send all legal modifiable actions through the provided dealer_communicator with a modifier' do
       PokerAction::MODIFIABLE_ACTIONS.each do |action|
         arbitrary_modifier = 9001
         action_string = action + arbitrary_modifier.to_s
-        action_that_should_be_sent = @match_state.to_s + ":#{action_string}"
-        @connection.expect :write, nil, [action_that_should_be_sent]
+        action_that_should_be_sent = match_state.to_s + ":#{action_string}"
+        dealer_communicator.expect :write, nil, [action_that_should_be_sent]
 
-        BasicProxy.send_action @connection, @match_state, action_string
+        BasicProxy.send_action dealer_communicator, match_state, action_string
       end
     end
     it 'works for all test data examples' do
@@ -124,9 +168,9 @@ describe BasicProxy do
 
               action_that_should_be_sent = "#{from_player_message.to_s}:#{action.to_acpc}"
 
-              @connection.expect :write, nil, [action_that_should_be_sent]
+              dealer_communicator.expect :write, nil, [action_that_should_be_sent]
 
-              BasicProxy.send_action @connection, from_player_message, action
+              BasicProxy.send_action dealer_communicator, from_player_message, action
             end
           end
         end

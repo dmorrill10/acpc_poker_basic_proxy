@@ -11,12 +11,14 @@ module AcpcPokerBasicProxy
   class BasicProxy
     exceptions :initial_match_state_not_yet_received, :illegal_action_format
 
-    CONCATENATED_MODIFIABLE_ACTIONS = AcpcPokerTypes::PokerAction::MODIFIABLE_ACTIONS.to_a.join
+    CONCATENATED_MODIFIABLE_ACTIONS = (
+      AcpcPokerTypes::PokerAction::MODIFIABLE_ACTIONS.to_a.join
+    )
 
     # Sends the given +action+ to through the given +connection+ in the ACPC
     # format.
-    # @param [#write, #ready_to_write?] connection The connection through which the +action+
-    #  should send.
+    # @param [#write, #ready_to_write?] connection The connection through
+    #   which the +action+ should send.
     # @param [#to_s] match_state The current match state.
     # @param [#to_s] action The action to send through the +connection+.
     # @return [Integer] The number of bytes written.
@@ -25,17 +27,27 @@ module AcpcPokerBasicProxy
     def self.send_action(connection, match_state, action)
       validate_action action
 
-      full_action = "#{AcpcPokerTypes::MatchState.parse(match_state.to_s)}:#{action.to_s}"
+      full_action = (
+        "#{AcpcPokerTypes::MatchState.parse(match_state.to_s)}:#{action.to_s}"
+      )
       connection.write full_action
     end
 
     # Sends a comment the given +connection+.
-    # @param [#write, #ready_to_write?] connection The connection through which the +action+
-    #  should send.
+    # @param [#write, #ready_to_write?] connection The connection through
+    #   which the +comment+ should send.
     # @param [#to_s] comment The comment to send through the +connection+.
     # @return [Integer] The number of bytes written.
     def self.send_comment(connection, comment)
-      connection.write comment
+      connection.write "##{comment}"
+    end
+
+    # Sends a ready message to the given +connection+.
+    # @param [#write, #ready_to_write?] connection The connection through
+    #   which the message should send.
+    # @return [Integer] The number of bytes written.
+    def self.send_ready(connection)
+      connection.write DealerStream::READY_MESSAGE
     end
 
     # @raise IllegalActionFormat
@@ -66,9 +78,14 @@ module AcpcPokerBasicProxy
     end
 
     # @param [#to_s] comment The comment to send.
-    # @return (see BasicProxy#send_action)
+    # @return (see BasicProxy#send_comment)
     def send_comment(comment)
       BasicProxy.send_comment @dealer_communicator, comment
+    end
+
+    # @return (see BasicProxy#send_ready)
+    def send_ready
+      BasicProxy.send_ready @dealer_communicator
     end
 
     # @see MatchStateReceiver#receive_match_state

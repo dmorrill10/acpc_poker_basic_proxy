@@ -57,6 +57,8 @@ module AcpcPokerBasicProxy
     # @return [String] Dealer specified string terminator.
     TERMINATION_STRING = "\r\n"
 
+    READY_MESSAGE = '#READY'
+
     # @param [Integer] port The port on which to connect to the dealer.
     # @param [String] host_name The host on which the dealer is running. Defaults to 'localhost'
     # @raise AcpcDealerConnectionError, UnableToWriteToDealer
