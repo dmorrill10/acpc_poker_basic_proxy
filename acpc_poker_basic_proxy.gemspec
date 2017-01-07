@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'awesome_print', '~> 1.0'
   s.add_development_dependency 'pry-rescue', '~> 1.0'
   s.add_development_dependency 'simplecov', '~> 0.7'
-  s.add_development_dependency 'acpc_dealer', '~> 2.0'
+  s.add_development_dependency 'acpc_dealer', '~> 3.0'
 end
